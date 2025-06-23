@@ -1,0 +1,103 @@
+#include <stdio.h>
+
+
+#define TAMANHO_TABULEIRO 10 // Tamanho fixo do tabuleiro (10x10)
+#define TAMANHO_NAVIO 3      // Tamanho fixo dos navios (3 posições)
+#define AGUA 0               // Valor para representar a água no tabuleiro
+#define NAVIO 3              // Valor para representar uma parte de navio
+
+int main() {
+    // --- 1. Represente o Tabuleiro ---
+    // Declara a matriz (array bidimensional) para o tabuleiro.
+    int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
+
+    // Documentação da Variável:
+    // 'tabuleiro' é a matriz 10x10 que representa nosso campo de batalha.
+    // Cada posição guardará um valor: 0 para água ou 3 para navio.
+
+    // Bloco de código para inicializar o tabuleiro:
+    // Utiliza loops aninhados para percorrer cada célula da matriz.
+    printf("Inicializando o tabuleiro %dx%d com água (0)...\n", TAMANHO_TABULEIRO, TAMANHO_TABULEIRO);
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            tabuleiro[i][j] = AGUA; // Define cada posição como água.
+        }
+    }
+    printf("Tabuleiro inicializado.\n\n");
+
+    // --- 2. Posicione os Navios ---
+    // As coordenadas iniciais são definidas diretamente no código.
+    // Lembre-se que em C, os índices de arrays começam em 0.
+    // Linha 2 é o índice 1, Coluna 3 é o índice 2.
+
+    // Coordenadas do Navio 1 (Horizontal)
+    int navio1_linha = 2;
+    int navio1_coluna = 2;
+
+    // Coordenadas do Navio 2 (Vertical)
+    int navio2_linha = 4;
+    int navio2_coluna = 5;
+
+    // --- Validação e Posicionamento do Navio 1 (Horizontal) ---
+    printf("Posicionando Navio 1 (Horizontal) em L:%d C:%d...\n", navio1_linha, navio1_coluna);
+
+    // Requisito: Validar se o navio cabe nos limites do tabuleiro.
+    if (navio1_coluna + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
+        printf("ERRO: Navio 1 (Horizontal) sai dos limites do tabuleiro!\n");
+        return 1; // Encerra o programa com um código de erro.
+    } else {
+        // Bloco de código para posicionar o navio:
+        // Percorre o vetor do navio (conceitualmente) e copia seu valor para o tabuleiro.
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            tabuleiro[navio1_linha][navio1_coluna + i] = NAVIO;
+        }
+        printf("Navio 1 posicionado com sucesso.\n\n");
+    }
+
+    // --- Validação e Posicionamento do Navio 2 (Vertical) ---
+    printf("Posicionando Navio 2 (Vertical) em L:%d C:%d...\n", navio2_linha, navio2_coluna);
+
+    // Requisito: Validar se o navio cabe nos limites do tabuleiro.
+    if (navio2_linha + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
+        printf("ERRO: Navio 2 (Vertical) sai dos limites do tabuleiro!\n");
+        return 1;
+    }
+
+    // Requisito: Validar se os navios não se sobrepõem.
+    bool sobrepoe = false; // Flag para controlar a sobreposição.
+    // Bloco para verificar sobreposição:
+    // Antes de colocar o navio 2, verifica se as posições que ele ocuparia já são 'NAVIO'.
+    for (int i = 0; i < TAMANHO_NAVIO; i++) {
+        if (tabuleiro[navio2_linha + i][navio2_coluna] == NAVIO) {
+            sobrepoe = true; // Se encontrar uma parte de navio, ativa a flag.
+            break; // Não precisa continuar verificando.
+        }
+    }
+
+    if (sobrepoe) {
+        printf("ERRO: Navio 2 (Vertical) sobrepõe o Navio 1!\n");
+        return 1;
+    } else {
+        // Se passou em todas as validações, posiciona o navio.
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            tabuleiro[navio2_linha + i][navio2_coluna] = NAVIO;
+        }
+        printf("Navio 2 posicionado com sucesso.\n\n");
+    }
+
+
+    // --- 3. Exiba o Tabuleiro ---
+    printf("--- TABULEIRO FINAL DE BATALHA NAVAL ---\n");
+
+    // Bloco de código para exibir a matriz:
+    // Loops aninhados para percorrer e imprimir cada célula.
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            // Imprime o valor da célula seguido de um espaço para legibilidade.
+            printf("%d ", tabuleiro[i][j]);
+        }
+        // Pula uma linha ao final de cada linha da matriz.
+        printf("\n");
+    }
+
+    return 0; // Indica que o programa terminou com sucesso.
